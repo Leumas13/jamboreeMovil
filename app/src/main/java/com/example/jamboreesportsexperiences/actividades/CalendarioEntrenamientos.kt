@@ -1,5 +1,6 @@
 package com.example.jamboreesportsexperiences.actividades
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -9,10 +10,14 @@ import android.util.Log
 import android.view.Gravity
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import com.applandeo.materialcalendarview.CalendarDay
 import com.applandeo.materialcalendarview.CalendarView
 import com.applandeo.materialcalendarview.listeners.OnCalendarDayClickListener
@@ -47,6 +52,7 @@ class CalendarioEntrenamientos : AppCompatActivity() {
 
         //Recuperar la tabla
         val tabla = findViewById<TableLayout>(R.id.tabla)
+        filaPrincipal(tabla)
 
         var idAdmin: Int? = null
         //Login como administrador
@@ -58,10 +64,17 @@ class CalendarioEntrenamientos : AppCompatActivity() {
                     idAdmin = uid
                 }
             }else{
-                var toast = Toast.makeText(this, "Ha ocurrido un error, por favor vuelva " +
-                        "a intentarlo dentro de unos segundos.", Toast.LENGTH_LONG)
-                toast.setGravity(Gravity.CENTER, Gravity.CENTER_HORIZONTAL, 800)
-                toast.show()
+                var alert = AlertDialog.Builder(this)
+                    .setTitle("Error de conexión")
+                    .setMessage("Ha ocurrido un error de conexión. Por favor, vuelva a iniciar sesión para solucionarlo.")
+                    .setPositiveButton("Ok"){ _, _ ->
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                    }
+                    .setIcon(R.drawable.error_icono)
+                    .create()
+
+                alert.show()
             }
         }
 
@@ -84,16 +97,16 @@ class CalendarioEntrenamientos : AppCompatActivity() {
         }
 
         calendarView.setOnCalendarDayClickListener(object: OnCalendarDayClickListener {
+            @SuppressLint("ResourceAsColor")
             override fun onClick(calendarDay: CalendarDay) {
                 val dia = calendarDay.calendar.get(Calendar.DAY_OF_MONTH)
                 val mes = calendarDay.calendar.get(Calendar.MONTH)
                 val anyo = calendarDay.calendar.get(Calendar.YEAR)
 
                 tabla.removeAllViews()
+                filaPrincipal(tabla)
 
                 if(mapaEventos.containsKey("$anyo-$mes-$dia")){
-                    filaPrincipal(tabla)
-
                     val jugadores = mapaEventos["$anyo-$mes-$dia"]?.split("\n")
 
                     if (jugadores != null) {
@@ -107,33 +120,44 @@ class CalendarioEntrenamientos : AppCompatActivity() {
                             //crear una nueva fila
                             val fila = TableRow(this@CalendarioEntrenamientos)
 
+                            //fuente
+                            val fuente = ResourcesCompat.getFont(this@CalendarioEntrenamientos, R.font.montserrat_medium)
+
                             //crear columnas
                             val nombreJugador = TextView(this@CalendarioEntrenamientos)
                             nombreJugador.text = nombreJ
-                            nombreJugador.textSize = 16f // Tamaño del texto
-                            nombreJugador.setTextColor(Color.BLACK) // Color del texto
+                            nombreJugador.typeface = fuente
+                            nombreJugador.textSize = 18f // Tamaño del texto
                             nombreJugador.gravity = Gravity.CENTER // Centrado
+                            nombreJugador.setBackgroundResource(R.drawable.bordes_celda) //bordes
+                            nombreJugador.setPadding(0, 0, 0, 20)//Espacio por abajo
                             nombreJugador.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
 
                             val nombreSede = TextView(this@CalendarioEntrenamientos)
                             nombreSede.text = nombreS
-                            nombreSede.textSize = 16f // Tamaño del texto
-                            nombreSede.setTextColor(Color.BLACK) // Color del texto
+                            nombreSede.typeface = fuente
+                            nombreSede.textSize = 18f // Tamaño del texto
                             nombreSede.gravity = Gravity.CENTER // Centrado
+                            nombreSede.setBackgroundResource(R.drawable.bordes_celda) //bordes
+                            nombreSede.setPadding(0, 0, 0, 20)//Espacio por abajo
                             nombreSede.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
 
                             val hora = TextView(this@CalendarioEntrenamientos)
                             hora.text = h
-                            hora.textSize = 16f // Tamaño del texto
-                            hora.setTextColor(Color.BLACK) // Color del texto
+                            hora.typeface = fuente
+                            hora.textSize = 18f // Tamaño del texto
                             hora.gravity = Gravity.CENTER // Centrado
+                            hora.setBackgroundResource(R.drawable.bordes_celda) //bordes
+                            hora.setPadding(0, 0, 0, 20)//Espacio por abajo
                             hora.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
 
                             val tipo = TextView(this@CalendarioEntrenamientos)
                             tipo.text = tur
-                            tipo.textSize = 16f // Tamaño del texto
-                            tipo.setTextColor(Color.BLACK) // Color del texto
+                            tipo.typeface = fuente
+                            tipo.textSize = 18f // Tamaño del texto
                             tipo.gravity = Gravity.CENTER // Centrado
+                            tipo.setBackgroundResource(R.drawable.bordes_celda) //bordes
+                            tipo.setPadding(0, 0, 0, 20)//Espacio por abajo
                             tipo.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
 
                             //añadir columnas
@@ -148,8 +172,6 @@ class CalendarioEntrenamientos : AppCompatActivity() {
                         }
                     }
 
-                }else{
-                    Toast.makeText(baseContext, "$anyo-$mes-$dia", Toast.LENGTH_SHORT).show()
                 }
             }
         })
@@ -159,7 +181,9 @@ class CalendarioEntrenamientos : AppCompatActivity() {
             override fun onChange() {
                 val month = calendarView.currentPageDate.get(Calendar.MONTH)+1
                 val year = calendarView.currentPageDate.get(Calendar.YEAR)
-                Toast.makeText(baseContext, "$month/$year", Toast.LENGTH_SHORT).show()
+                val toast = Toast.makeText(baseContext, "$month/$year", Toast.LENGTH_SHORT)
+                toast.setGravity(Gravity.CENTER, 0, 1100)
+                toast.show()
             }
         })
 
@@ -167,7 +191,9 @@ class CalendarioEntrenamientos : AppCompatActivity() {
             override fun onChange() {
                 val month = calendarView.currentPageDate.get(Calendar.MONTH)+1
                 val year = calendarView.currentPageDate.get(Calendar.YEAR)
-                Toast.makeText(baseContext, "$month/$year", Toast.LENGTH_SHORT).show()
+                val toast = Toast.makeText(baseContext, "$month/$year", Toast.LENGTH_SHORT)
+                toast.setGravity(Gravity.CENTER, 0, 1100)
+                toast.show()
             }
         })
 
@@ -205,13 +231,20 @@ class CalendarioEntrenamientos : AppCompatActivity() {
             ) {
 
                 /*response.body()?.result?.let { result ->
-                    // Aquí obtienes el resultado de la búsqueda
                     println("Resultado de la búsqueda: $result")
                 }*/
                 val resultado = response.body()?.result;
                 val arrayJug = resultado?.get(0)?.get("jugador_ids") as ArrayList<Double>;
 
+                //Barra de progreso
+                var barraProg = findViewById<ProgressBar>(R.id.barraP)
+                barraProg.progress += 10
                 for (id in arrayJug){
+                    if(barraProg.progress<100){
+                        barraProg.progress += 10
+                    }else{
+                        barraProg.progress =0
+                    }
                     recuperarJugadores(sessionId,id.toInt())
                 }
 
@@ -258,7 +291,15 @@ class CalendarioEntrenamientos : AppCompatActivity() {
                 val arrayEntrenamientos = resultado?.get(0)?.get("entrenamiento_ids") as ArrayList<Double>;
                 val nombreJug = resultado?.get(0)?.get("nombre") as String;
 
+                //Barra de progreso
+                var barraProg = findViewById<ProgressBar>(R.id.barraP)
+                barraProg.progress += 10
                 for (i in arrayEntrenamientos){
+                    if(barraProg.progress<100){
+                        barraProg.progress += 10
+                    }else{
+                        barraProg.progress =0
+                    }
                     recuperarEntrenamientos(sessionId,i.toInt(),nombreJug)
                 }
 
@@ -335,6 +376,14 @@ class CalendarioEntrenamientos : AppCompatActivity() {
                     mapaEventos["$anyo-$mes-$dia"] = "$nombreJug;$nombreSede;$hora;$tipo"
                 }
 
+                //Barra de progreso
+                var barraProg = findViewById<ProgressBar>(R.id.barraP)
+                if(barraProg.progress<100){
+                    barraProg.progress += 10
+                }else{
+                    barraProg.progress = 0
+                }
+
                 //Se llama a pintar el calendario, esto solo funcionará si no hay más llamadas a la API (llamadasAPI=0)
                 llamadasAPI--
                 pintarCalendario()
@@ -356,45 +405,72 @@ class CalendarioEntrenamientos : AppCompatActivity() {
                 }
 
                 calendarView.setCalendarDays(calendars)
+
+                val btPerfil = findViewById<ImageButton>(R.id.btPerfil)
+                btPerfil.isClickable = true
+
+                //Barra de progreso
+                var barraProg = findViewById<ProgressBar>(R.id.barraP)
+                barraProg.progress = 100
+                barraProg.isVisible = false
             }
+
     }
 
     private fun filaPrincipal(tabla:TableLayout){
 
         //crear una nueva fila
         val fila = TableRow(this@CalendarioEntrenamientos)
+        //crear una nueva fila
+        val fila2 = TableRow(this@CalendarioEntrenamientos)
+        //fuente
+        val fuente = ResourcesCompat.getFont(this, R.font.montserrat_bold)
+
+        //crear columnas
+        val e = TextView(this@CalendarioEntrenamientos)
+        e.text = "Detalles"
+        e.typeface = fuente// Negrita
+        e.textSize = 30f // Tamaño del texto
+        e.setTextColor(Color.BLACK) // Color del texto
+        e.gravity = Gravity.CENTER // Centrado
+        e.setBackgroundResource(R.drawable.bordes_celda) //bordes
+        e.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
 
         //crear columnas
         val nombreJugador = TextView(this@CalendarioEntrenamientos)
         nombreJugador.text = "Jugador"
-        nombreJugador.setTypeface(null, Typeface.BOLD) // Negrita
-        nombreJugador.textSize = 16f // Tamaño del texto
+        nombreJugador.typeface = fuente// Negrita
+        nombreJugador.textSize = 20f // Tamaño del texto
         nombreJugador.setTextColor(Color.BLACK) // Color del texto
         nombreJugador.gravity = Gravity.CENTER // Centrado
+        nombreJugador.setBackgroundResource(R.drawable.bordes_celda) //bordes
         nombreJugador.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
 
         val nombreSede = TextView(this@CalendarioEntrenamientos)
         nombreSede.text = "Sede"
-        nombreSede.setTypeface(null, Typeface.BOLD) // Negrita
-        nombreSede.textSize = 16f // Tamaño del texto
+        nombreSede.typeface = fuente // Negrita
+        nombreSede.textSize = 20f // Tamaño del texto
         nombreSede.setTextColor(Color.BLACK) // Color del texto
         nombreSede.gravity = Gravity.CENTER // Centrado
+        nombreSede.setBackgroundResource(R.drawable.bordes_celda) //bordes
         nombreSede.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
 
         val hora = TextView(this@CalendarioEntrenamientos)
         hora.text = "Hora"
-        hora.setTypeface(null, Typeface.BOLD) // Negrita
-        hora.textSize = 16f // Tamaño del texto
+        hora.typeface = fuente// Negrita
+        hora.textSize = 20f // Tamaño del texto
         hora.setTextColor(Color.BLACK) // Color del texto
         hora.gravity = Gravity.CENTER // Centrado
+        hora.setBackgroundResource(R.drawable.bordes_celda) //bordes
         hora.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
 
         val tipo = TextView(this@CalendarioEntrenamientos)
         tipo.text = "Tipo"
-        tipo.setTypeface(null, Typeface.BOLD) // Negrita
-        tipo.textSize = 16f // Tamaño del texto
+        tipo.typeface = fuente // Negrita
+        tipo.textSize = 20f // Tamaño del texto
         tipo.setTextColor(Color.BLACK) // Color del texto
         tipo.gravity = Gravity.CENTER // Centrado
+        tipo.setBackgroundResource(R.drawable.bordes_celda) //bordes
         tipo.layoutParams = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
 
         //añadir columnas
@@ -403,6 +479,8 @@ class CalendarioEntrenamientos : AppCompatActivity() {
         fila.addView(hora)
         fila.addView(tipo)
 
+        fila2.addView(e)
+        tabla.addView(fila2)
         //añadir fila a la tabla
         tabla.addView(fila)
     }

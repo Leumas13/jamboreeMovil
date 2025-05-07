@@ -6,4 +6,8 @@
     </style>
 
     <style name="Theme.JamboreeSportsExperiences" parent="Base.Theme.JamboreeSportsExperiences" />
+
+    <style name="SplashTheme" parent="Base.Theme.JamboreeSportsExperiences">
+        <item name="android:windowBackground">@drawable/splashscreen</item>
+    </style>
 </resources>

@@ -4,30 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#6CBE8D"
     tools:context=".actividades.CalendarioEntrenamientos">
 
     <com.applandeo.materialcalendarview.CalendarView
         android:id="@+id/calendar"
-        android:layout_width="408dp"
-        android:layout_height="445dp"
-        android:layout_marginBottom="212dp"
-        app:abbreviationsLabelsColor="@color/white"
+        android:layout_width="413dp"
+        android:layout_height="444dp"
+        android:layout_marginBottom="227dp"
+        app:abbreviationsBarColor="#C5DDCE"
+        app:abbreviationsLabelsColor="#498862"
+        app:anotherMonthsDaysLabelsColor="#636E67"
+        app:daysLabelsColor="#5A9E75"
         app:eventsEnabled="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:headerColor="#AEABCFB9"
+        app:headerLabelColor="#3C8057"
+        app:layout_constraintBottom_toBottomOf="@+id/tabla"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
+        app:pagesColor="#526CBD8C"
+        app:selectionColor="#1A2A30"
+        app:selectionLabelColor="#FFFFFF"
+        app:todayLabelColor="#1D36DD"
         app:type="one_day_picker" />
 
     <TableLayout
         android:id="@+id/tabla"
-        android:layout_width="403dp"
-        android:layout_height="191dp"
+        android:layout_width="412dp"
+        android:layout_height="212dp"
+        android:layout_marginBottom="72dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendar">
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent">
 
         <TableRow
             android:layout_width="match_parent"
@@ -50,34 +61,75 @@
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="92dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/calendar"
-        app:layout_constraintEnd_toStartOf="@+id/btPerfil"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.563" />
-
-    <ImageButton
-        android:id="@+id/btPerfil"
-        android:layout_width="61dp"
-        android:layout_height="46dp"
-        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Entrenamientos"
+        android:textColor="#1A2A30"
+        android:textSize="40sp"
         app:layout_constraintBottom_toTopOf="@+id/calendar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.551"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <ImageButton
-        android:id="@+id/btSalirCal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/calendar"
-        app:layout_constraintEnd_toStartOf="@+id/textView10"
-        app:layout_constraintHorizontal_bias="0.125"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.516"
-        app:srcCompat="@drawable/ic_arrow_left" />
+        app:layout_constraintVertical_bias="0.308" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="413dp"
+        android:layout_height="72dp"
+        android:background="#E162AA7E"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabla"
+        app:layout_constraintVertical_bias="1.0">
+
+        <ImageButton
+            android:id="@+id/btSalirCal"
+            android:layout_width="65dp"
+            android:layout_height="53dp"
+            android:background="@drawable/salir"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageView"
+            app:layout_constraintHorizontal_bias="0.547"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="75dp"
+            android:layout_height="50dp"
+            android:background="@drawable/logo_oscuroescala_2x"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btPerfil"
+            android:layout_width="69dp"
+            android:layout_height="64dp"
+            android:background="@drawable/perfil"
+            android:clickable="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.474"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/barraP"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="412dp"
+        android:layout_height="23dp"
+        android:max="100"
+        android:progressTint="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/calendar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

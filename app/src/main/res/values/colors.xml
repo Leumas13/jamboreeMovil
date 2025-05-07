@@ -2,4 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="verdeClaro">#6CBE8D</color>
+    <color name="verdeOscuro">#1A2A30</color>
+    <color name="verdeCalendario">#CFE9D9</color>
 </resources>
